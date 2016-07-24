@@ -46,6 +46,11 @@
 #endif
 #endif
 
+#if __POSIX_VISIBLE >= 200809 || defined (_COMPILING_NEWLIB)
+struct __locale_t;
+typedef struct __locale_t *locale_t;
+#endif
+
 _BEGIN_STD_C
 
 /* As in stdio.h, <sys/reent.h> defines __FILE. */
@@ -127,6 +132,15 @@ float _EXFUN(_wcstof_r, (struct _reent *, const wchar_t *, wchar_t **));
 int	_EXFUN(wcswidth, (const wchar_t *, size_t));
 size_t	_EXFUN(wcsxfrm, (wchar_t *__restrict, const wchar_t *__restrict,
 				size_t));
+
+#if __POSIX_VISIBLE >= 200809
+extern int wcscasecmp_l (const wchar_t *, const wchar_t *, locale_t);
+extern int wcsncasecmp_l (const wchar_t *, const wchar_t *, size_t, locale_t);
+extern int wcscoll_l (const wchar_t *, const wchar_t *, locale_t);
+extern size_t wcsxfrm_l (wchar_t *__restrict, const wchar_t *__restrict, size_t,
+			 locale_t);
+#endif
+
 int	_EXFUN(wcwidth, (const wchar_t));
 wchar_t	*_EXFUN(wmemchr, (const wchar_t *, wchar_t, size_t));
 int	_EXFUN(wmemcmp, (const wchar_t *, const wchar_t *, size_t));
