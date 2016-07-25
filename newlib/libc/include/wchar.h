@@ -46,9 +46,8 @@
 #endif
 #endif
 
-#if __POSIX_VISIBLE >= 200809 || defined (_COMPILING_NEWLIB)
-struct __locale_t;
-typedef struct __locale_t *locale_t;
+#if __POSIX_VISIBLE >= 200809
+#include <sys/_locale.h>
 #endif
 
 _BEGIN_STD_C
