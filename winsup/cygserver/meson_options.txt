@@ -1,0 +1,2 @@
+option('enable-debugging', type: 'boolean', value: false, description: 'Build a cygwin DLL which has more consistency checking for debugging')
+
