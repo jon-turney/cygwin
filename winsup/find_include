@@ -1,0 +1,15 @@
+#!/bin/sh
+##
+## Ask gcc which directory in the standard include search path it can find a given
+## include file.
+##
+## This is kind of like gcc -print-file-name, except for includes instead of
+## libraries
+##
+## Just adding the directory an include file was found in might not be enough,
+## as it might include other includes which require other paths, but we leave
+## that issue.
+##
+CC=$1
+INCLUDE=$2
+$CC -xc++ /dev/null -E -include $INCLUDE 2>/dev/null | sed -n 's%^# 1 "\([^"]*\)/'$INCLUDE'".*$%\1%p' | head -n1

@@ -25,6 +25,7 @@ cygwin_build:=${target_builddir}/winsup/cygwin
 # environment variables used by ccwrap
 export CCWRAP_HEADERS:=$(dir ${srcdir})/cygwin ${cygwin_build}
 export CCWRAP_SYSTEM_HEADERS:=@cygwin_headers@ @newlib_headers@
+export CCWRAP_COMPILER_HEADERS:=@compiler_headers@
 export CCWRAP_DIRAFTER_HEADERS:=@windows_headers@
 
 DESTDIR=

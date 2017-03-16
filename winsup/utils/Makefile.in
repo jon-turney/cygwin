@@ -27,6 +27,7 @@ cygwin_headers:=@cygwin_headers@
 # environment variables used by ccwrap
 export CCWRAP_HEADERS:=. ${srcdir} $(call justdir,${cygwin_headers})
 export CCWRAP_SYSTEM_HEADERS:=${cygwin_headers} @newlib_headers@
+export CCWRAP_COMPILER_HEADERS:=@compiler_headers@
 export CCWRAP_DIRAFTER_HEADERS:=@windows_headers@
 
 WINDOWS_LIBDIR:=@windows_libdir@
@@ -111,9 +112,9 @@ ldh.exe: MINGW_LDFLAGS += -nostdlib -lkernel32
 libbfd   := $(call libname,libbfd.a)
 build_dumper := $(shell test -r "$(libbfd)" && echo 1)
 
-ifdef build_dumper
+ifneq ($(build_dumper),)
 CYGWIN_BINS += dumper.exe
-dumper.o module_info.o parse_pe.o: CXXFLAGS += -I$(top_srcdir)/include
+dumper.o module_info.o parse_pe.o: CXXFLAGS += -I$(top_srcdir)/include -I/usr/include
 dumper.o parse_pe.o: dumper.h
 dumper.exe: module_info.o parse_pe.o
 dumper.exe: CYGWIN_LDFLAGS += -lpsapi -lbfd -lintl -liconv -liberty ${ZLIB}
@@ -144,7 +145,7 @@ ${MINGW_OBJS}: CCWRAP_HEADERS:=${srcdir}
 ${MINGW_OBJS}: CCWRAP_SYSTEM_HEADERS:=
 # ${MINGW_OBJS}: CCWRAP_DIRAFTER_HEADERS:=
 $(MINGW_OBJS): %.o: %.cc
-	c++wrap -c -o $@ ${CXXFLAGS} $(MINGW_CXXFLAGS) $<
+	${MINGW_CXX} -c -o $@ ${CXXFLAGS} $(MINGW_CXXFLAGS) $<
 
 # how to link a MinGW binary
 $(MINGW_BINS): %.exe: %.o
