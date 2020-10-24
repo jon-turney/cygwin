@@ -10,7 +10,13 @@
 exec 9> version.cc
 
 #
-# Arg 1 is the name of the version include file
+# Arg 1 is the version include file
+# Arg 2 is the rc file
+# Arg 3 is the windows resource compiler
+# Arg 4+ are the include flags passed to windres
+#
+# $CC in the environment should be set to a compiler windres can use with -E to
+# preprocess
 #
 incfile="$1"; shift
 rcfile="$1"; shift
