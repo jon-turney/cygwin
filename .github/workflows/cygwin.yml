@@ -5,7 +5,7 @@ on: push
 jobs:
   fedora-build:
     runs-on: ubuntu-latest
-    container: fedora:latest
+    container: fedora:32
     strategy:
       fail-fast: false
       matrix:
