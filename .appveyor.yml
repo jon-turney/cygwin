@@ -1,11 +1,6 @@
 version: '{build}'
 image: Visual Studio 2019
 
-branches:
-  only:
-  - master
-  - /cygwin/
-
 skip_tags: true
 shallow_clone: true
 
