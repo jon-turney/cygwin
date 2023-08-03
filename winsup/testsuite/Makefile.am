@@ -48,6 +48,7 @@ check_PROGRAMS = \
 	winsup.api/shmtest \
 	winsup.api/sigchld \
 	winsup.api/signal-into-win32-api \
+	winsup.api/socketpair_full \
 	winsup.api/systemcall \
 	winsup.api/user_malloc \
 	winsup.api/waitpid \
