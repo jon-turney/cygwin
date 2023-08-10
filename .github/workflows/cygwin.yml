@@ -18,6 +18,9 @@ jobs:
           pkgarch: 64
     name: Fedora cross ${{ matrix.target }}
 
+    env:
+      HAS_SSH_KEY: ${{ secrets.SSH_KEY != '' }}
+
     steps:
     - uses: actions/checkout@v3
 
@@ -53,6 +56,17 @@ jobs:
         make -C build/*/newlib info man
         make -C build install
         make -C build/*/newlib install-info install-man
+
+    # deploy documentation preview
+    - name: Deploy documentation preview
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      run: |
+        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+        ssh-add - <<< "${{ secrets.SSH_KEY }}"
+        # 'make install' doesn't install faq, so instead just deploy from build directory
+        scp -v build/*/winsup/doc/{cygwin-api,cygwin-ug-net,faq} cygwin-admin@cygwin.com:/sourceware/www/sourceware/htdocs/cygwin/doc/preview/
+      if: env.HAS_SSH_KEY == 'true' && github.ref == 'refs/heads/main'
 
   windows-build:
     runs-on: windows-latest
