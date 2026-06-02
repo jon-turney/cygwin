@@ -222,11 +222,19 @@ _cygwin_crt0_common (MainFunc f, per_process *u)
   u->pseudo_reloc_end = &__RUNTIME_PSEUDO_RELOC_LIST_END__;
   u->image_base = &_image_base__;
   /* This is actually a dummy call to force the linker to load this
-     symbol for older apps which need it. Unfortunately, ld for x86_64
-     still emits this symbol when linking against static libs which
-     require pseudo relocation, so we can't drop this call and the
-     dummy function just yet. */
+     symbol for older apps which need it.
+
+     Unfortunately, ld prior to 2.48 emits this symbol for PE+ targets when
+     linking against static libs which require pseudo-relocation (even though
+     it's unncessary for v2 pseudo-reloc, which has always been available for
+     those targets), so we can't drop this call and the dummy function just yet.
+
+     Linking for aarch64 targets is assumed to be using ld 2.48 or later, which
+     no longer emits that reference.
+  */
+#ifdef __x86_64__
   _pei386_runtime_relocator (NULL);
+#endif
   return 1;
 }
 } /* "C" */
